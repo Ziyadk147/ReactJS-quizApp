@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import questions from '../../questions'
 import Answer from "../Answer/Answer";
 import Summary from "../Summary/Summary";
+import Timer from "../Timer/Timer";
 
 
 export default function Quiz() {
@@ -11,10 +12,12 @@ export default function Quiz() {
 
     const quizIsOver = selectedQuestionIndex === questions.length;
 
-    function handleAnswerSelect(answer) {
+    const handleAnserSelect =  function handleAnswerSelect(answer) {
         setUserAnswers((prevState) => [...prevState, answer])
-        // console.log(userAnswers)
     }
+
+    const handleTimeout = useCallback( () => handleAnswerSelect(null)  , [handleAnswerSelect] )
+
 
     if (quizIsOver) {
         return (
@@ -23,10 +26,13 @@ export default function Quiz() {
     }
     let shuffledAnswers = questions[selectedQuestionIndex].answers;
     shuffledAnswers.sort(() => Math.random() - 0.5);
+
     return (
         <main id="quiz">
             <div id="question">
-                <progress value={100} max={1000} />
+                
+                <Timer totalTime={5000} onTimeout={handleTimeout} />
+
                 <h2 id="question-overview">
                     {questions[selectedQuestionIndex].text}
                 </h2>
