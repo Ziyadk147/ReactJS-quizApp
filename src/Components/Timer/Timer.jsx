@@ -7,16 +7,22 @@ export default function Timer( {onTimeout , totalTime} ){
 
     useEffect( () => {
 
-        setTimeout( onTimeout , totalTime )
+        const timer = setTimeout( onTimeout , totalTime )
+
+        return () => {
+            clearTimeout(timer)
+        }
 
     } , [onTimeout , totalTime] )
 
     useEffect(()=>{
 
-        setInterval( () => {
+        const interval = setInterval( () => {
             setRemainingTime( (prevRemainingTime) => prevRemainingTime - 100 )
         } , 100 )
-    
+        return () => {
+            clearInterval(interval)
+        }
     } , [])
 
     return (

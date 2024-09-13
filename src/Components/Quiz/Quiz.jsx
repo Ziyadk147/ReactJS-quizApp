@@ -12,9 +12,7 @@ export default function Quiz() {
 
     const quizIsOver = selectedQuestionIndex === questions.length;
 
-    const handleAnserSelect =  function handleAnswerSelect(answer) {
-        setUserAnswers((prevState) => [...prevState, answer])
-    }
+    const handleAnswerSelect =  useCallback( (answer) =>   setUserAnswers((prevState) => [...prevState, answer]))
 
     const handleTimeout = useCallback( () => handleAnswerSelect(null)  , [handleAnswerSelect] )
 
@@ -31,7 +29,7 @@ export default function Quiz() {
         <main id="quiz">
             <div id="question">
                 
-                <Timer totalTime={5000} onTimeout={handleTimeout} />
+                <Timer  key={userAnswers} totalTime={5000} onTimeout={handleTimeout} />
 
                 <h2 id="question-overview">
                     {questions[selectedQuestionIndex].text}
